@@ -12,12 +12,12 @@ class Twitter:
 
     def tweet_text(self, text):
         logging.info("Tweeting text: %s", text)
-        twitter_api.update_status(text)
+        self.api.update_status(text)
 
     def tweet_image(self, file, filename="image.jpg"):
         logging.info("Uploading media with filename %s", filename)
-        media = twitter_api.media_upload(filename=filename, file=file)
+        media = self.api.media_upload(filename=filename, file=file)
         media_id = media.media_id
 
         logging.info("Tweeting media id: %i", media_id)
-        twitter_api.update_status(media_ids=[media_id])
+        self.api.update_status(media_ids=[media_id])
