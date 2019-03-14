@@ -16,13 +16,13 @@ twitter_api = twitter.Twitter(
 )
 
 while True:
-    two_hours = 2 * 60 * 60
-    sixteen_hours = 16 * 60 * 60
-    wait_secs = random.randint(two_hours, sixteen_hours)
-    next_dt = datetime.now() + timedelta(seconds=wait_secs)
+    min_wait = 5 * 60 * 60
+    max_wait = 16 * 60 * 60
+    wait = random.randint(min_wait, max_wait)
+    next_dt = datetime.now() + timedelta(seconds=wait)
 
-    logging.info("Waiting %is (until %s)", wait_secs, next_dt.strftime("%c"))
-    time.sleep(wait_secs)
+    logging.info("Waiting %is (until %s)", wait, next_dt.strftime("%c"))
+    time.sleep(wait)
 
     try:
         comment = dirty.get_comment()
