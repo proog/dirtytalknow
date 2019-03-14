@@ -1,8 +1,17 @@
+import multiprocessing
 import os
+import os.path
 import pytest
 import random
 import time
 from normalcommenter import imaging
+
+
+def process_image(test_name, comment, image_path, position):
+    image = imaging.make_image_with_text(image_path, comment, position=position)
+    imaging.write_image_to_file(
+        image, "test-output/img-%s-%s.jpg" % (os.path.basename(image_path), test_name)
+    )
 
 
 @pytest.mark.parametrize(
@@ -28,6 +37,8 @@ from normalcommenter import imaging
 def test_make_image_with_text(name, comment):
     os.makedirs("test-output", exist_ok=True)
 
-    bg_image = random.choice(imaging.get_available_images())
-    image = imaging.make_image_with_text(bg_image, comment)
-    imaging.write_image_to_file(image, "test-output/img-%s.jpg" % name)
+    with multiprocessing.Pool(5) as p:
+        args = [
+            (name, comment, img, pos) for (img, pos) in imaging.get_available_images()
+        ]
+        p.starmap(process_image, args)

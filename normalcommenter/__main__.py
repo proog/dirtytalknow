@@ -26,10 +26,10 @@ while True:
 
     try:
         comment = dirty.get_comment()
-        bg_image = random.choice(imaging.get_available_images())
+        (bg_image, position) = random.choice(imaging.get_available_images())
 
         try:
-            image = imaging.make_image_with_text(bg_image, comment)
+            image = imaging.make_image_with_text(bg_image, comment, position=position)
             twitter_api.tweet_image(image)
         except Exception:
             logging.exception("Making or posting image failed, posting text instead")
