@@ -20,7 +20,7 @@ def make_image_with_text(filename: str, text: str, position="middle"):
     draw = ImageDraw.Draw(img, "RGBA")
     draw.rectangle(rectangle_bounds, fill=(0, 0, 0, 160))
     draw.text((text_x + 3, text_y + 3), wrapped_text, font=font, fill=(0, 0, 0))
-    draw.text((text_x + 2, text_y + 2), wrapped_text, font=font, fill=(200, 60, 0))
+    draw.text((text_x + 2, text_y + 2), wrapped_text, font=font, fill=(240, 210, 60))
 
     output = io.BytesIO()
     img.save(output, format="jpeg", quality=100)
