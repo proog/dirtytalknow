@@ -1,4 +1,5 @@
 import logging
+import textwrap
 import tweepy
 
 
@@ -11,8 +12,15 @@ class Twitter:
         self.api = tweepy.API(auth)
 
     def tweet_text(self, text):
-        logging.info("Tweeting text: %s", text)
-        self.api.update_status(text)
+        text = " ".join(text.splitlines())
+        tweets = textwrap.wrap(text, width=280)
+        reply_to_id = None
+
+        for tweet in tweets:
+            logging.info("Tweeting text: %s", tweet)
+
+            reply_kwargs = {"in_reply_to_status_id": reply_to_id}
+            reply_to_id = self.api.update_status(tweet, **reply_kwargs).id
 
     def tweet_image(self, file, filename="image.jpg"):
         logging.info("Uploading media with filename %s", filename)

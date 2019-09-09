@@ -42,3 +42,9 @@ def test_make_image_with_text(name, comment):
             (name, comment, img, pos) for (img, pos) in imaging.get_available_images()
         ]
         p.starmap(process_image, args)
+
+
+def test_TextFittingException():
+    comment = "Lorem ipsum dolor sit amet, hinc audiam tritani te nam, no quo fabulas intellegam, quis bonorum ei est. Ne vide malis probatus mei, vivendo moderatius sea ut. Vix honestatis dissentiunt no, duo ad rebum novum. Vel legimus explicari deseruisse eu. Ius at tollit recusabo scriptorem, te dicit accusata nominati pri. No est sumo utroque tacimates. Tollit putent consectetuer cu usu, et soluta audiam insolens nec."
+    with pytest.raises(imaging.TextFittingException):
+        imaging.fit_text_to_image(imaging.FONT_FILE, comment, 100, 100)

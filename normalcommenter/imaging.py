@@ -10,6 +10,10 @@ FONT_FILE = os.path.join(ASSETS_PATH, "fonts/joystix.ttf")
 IMAGE_DIR = os.path.join(ASSETS_PATH, "images")
 
 
+class TextFittingException(Exception):
+    pass
+
+
 def make_image_with_text(filename: str, text: str, position="middle"):
     img = Image.open(filename)
 
@@ -63,7 +67,7 @@ def fit_text_to_image(font_name: str, text: str, img_width: int, img_height: int
                 logging.info("Fit text to image in %i attempts", attempts)
                 return (font, wrapped_text)
 
-    raise Exception("Couldn't fit text to image: %s" % text)
+    raise TextFittingException("Couldn't fit text to image: %s" % text)
 
 
 def _get_text_bounds(image: Image, position: str):
