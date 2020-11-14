@@ -2,6 +2,7 @@ import logging
 
 import requests
 
+URL = "https://talkdirty2me.netlify.app/.netlify/functions/comment"
 MAX_RETRIES = 2
 
 
@@ -11,7 +12,7 @@ def get_comment() -> str:
     while retries <= MAX_RETRIES:
         try:
             logging.info("Requesting comment")
-            resp = requests.get("https://dirty.per.computer/porn")
+            resp = requests.get(URL)
             resp.raise_for_status()
 
             comment = resp.json()["message"]
