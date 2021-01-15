@@ -2,7 +2,7 @@ import logging
 
 import requests
 
-URL = "https://talkdirty2me.netlify.app/.netlify/functions/comment"
+URL = "https://dirty.per.computer/api/comment"
 MAX_RETRIES = 2
 
 
