@@ -24,3 +24,5 @@ def get_comment() -> str:
                 MAX_RETRIES - retries,
             )
             retries += 1
+
+    raise Exception("Couldn't get comment in %i attempts" % MAX_RETRIES)
