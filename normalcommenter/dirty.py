@@ -2,7 +2,7 @@ import logging
 
 import requests
 
-URL = "https://dirty.per.computer/api/comment"
+URL = "https://dirty-api.per.computer/api/comment"
 MAX_RETRIES = 2
 
 
