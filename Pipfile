@@ -13,3 +13,7 @@ python_version = "3"
 
 [dev-packages]
 pytest = "*"
+
+[scripts]
+start = "python -m normalcommenter"
+test = "pytest"
