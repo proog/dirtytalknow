@@ -3,8 +3,10 @@ import logging
 import os
 import os.path
 import textwrap
+
+from PIL import Image, ImageDraw, ImageFont
+
 from . import ASSETS_PATH
-from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 FONT_FILE = os.path.join(ASSETS_PATH, "fonts/joystix.ttf")
 IMAGE_DIR = os.path.join(ASSETS_PATH, "images")

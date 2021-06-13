@@ -2,8 +2,9 @@ import logging
 import os
 import random
 import time
-from . import dirty, imaging, twitter
 from datetime import datetime, timedelta
+
+from . import dirty, imaging, twitter
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 
@@ -39,4 +40,3 @@ while True:
 
     except Exception:
         logging.exception("Execution error")
-

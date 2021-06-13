@@ -1,9 +1,9 @@
 import multiprocessing
 import os
 import os.path
+
 import pytest
-import random
-import time
+
 from normalcommenter import dirty, imaging
 
 
