@@ -8,22 +8,22 @@ from . import dirty, imaging, twitter
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
 
-consumer_key = os.environ["TWITTER_CONSUMER_KEY"]
-consumer_secret = os.environ["TWITTER_CONSUMER_SECRET"]
-access_token = os.environ["TWITTER_ACCESS_TOKEN"]
-access_token_secret = os.environ["TWITTER_ACCESS_TOKEN_SECRET"]
+min_wait_secs = 5 * 60 * 60  # 5 hours
+max_wait_secs = 16 * 60 * 60  # 16 hours
+
 twitter_api = twitter.Twitter(
-    consumer_key, consumer_secret, access_token, access_token_secret
+    os.environ["TWITTER_CONSUMER_KEY"],
+    os.environ["TWITTER_CONSUMER_SECRET"],
+    os.environ["TWITTER_ACCESS_TOKEN"],
+    os.environ["TWITTER_ACCESS_TOKEN_SECRET"],
 )
 
 while True:
-    min_wait = 5 * 60 * 60
-    max_wait = 16 * 60 * 60
-    wait = random.randint(min_wait, max_wait)
-    next_dt = datetime.now() + timedelta(seconds=wait)
+    wait_secs = random.randint(min_wait_secs, max_wait_secs)
+    next_dt = datetime.now() + timedelta(seconds=wait_secs)
 
-    logging.info("Waiting %is (until %s)", wait, next_dt.strftime("%c"))
-    time.sleep(wait)
+    logging.info(f"Waiting {wait_secs}s (until {next_dt.strftime('%c')})")
+    time.sleep(wait_secs)
 
     try:
         comment = dirty.get_comment()
