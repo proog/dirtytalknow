@@ -25,8 +25,12 @@ class Twitter:
 
     def tweet_image(self, file, filename="image.jpg"):
         logging.info("Uploading media with filename %s", filename)
-        media = self.api.media_upload(filename=filename, file=file)
+
+        # Seek to beginning before uploading https://github.com/tweepy/tweepy/issues/1667#issuecomment-927342823
+        file.seek(0)
+
+        media = self.api.media_upload(filename, file=file)
         media_id = media.media_id
 
         logging.info("Tweeting media id: %i", media_id)
-        self.api.update_status(media_ids=[media_id])
+        self.api.update_status("", media_ids=[media_id])
