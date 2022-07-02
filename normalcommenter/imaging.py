@@ -49,6 +49,7 @@ def get_available_images():
 
 
 def fit_text_to_image(font_name: str, text: str, img_width: int, img_height: int):
+    base_font = ImageFont.truetype(font_name)
     img = Image.new("1", (img_width, img_height))
     draw = ImageDraw.Draw(img)
     padding = 5
@@ -58,7 +59,7 @@ def fit_text_to_image(font_name: str, text: str, img_width: int, img_height: int
 
     # decrease line width, then font size, until a fit is achieved
     for font_size in range(100, 12, -1):
-        font = ImageFont.truetype(font_name, font_size)
+        font = base_font.font_variant(size=font_size)
 
         for line_width in range(50, 10, -1):
             attempts += 1
