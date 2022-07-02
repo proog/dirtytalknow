@@ -63,7 +63,9 @@ def fit_text_to_image(font_name: str, text: str, img_width: int, img_height: int
         for line_width in range(50, 10, -1):
             attempts += 1
             wrapped_text = textwrap.fill(text, width=line_width)
-            (text_width, text_height) = draw.multiline_textsize(wrapped_text, font=font)
+            (_, _, text_width, text_height) = draw.multiline_textbbox(
+                (0, 0), wrapped_text, font=font
+            )
 
             if text_width <= max_width and text_height <= max_height:
                 logging.info("Fit text to image in %i attempts", attempts)
