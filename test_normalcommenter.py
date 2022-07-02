@@ -36,12 +36,10 @@ def process_image(test_name, comment, image_path, position):
 )
 def test_make_image_with_text(name, comment):
     os.makedirs("test-output", exist_ok=True)
+    args = [(name, comment, img, pos) for (img, pos) in imaging.get_available_images()]
 
-    with multiprocessing.Pool(5) as p:
-        args = [
-            (name, comment, img, pos) for (img, pos) in imaging.get_available_images()
-        ]
-        p.starmap(process_image, args)
+    with multiprocessing.Pool() as pool:
+        pool.starmap(process_image, args)
 
 
 def test_TextFittingException():
