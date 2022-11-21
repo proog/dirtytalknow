@@ -31,7 +31,7 @@ while True:
 
         try:
             image = imaging.make_image_with_text(bg_image, comment, position=position)
-            twitter_api.tweet_image(image)
+            twitter_api.tweet_image(image, alt_text=comment)
         except imaging.TextFittingException:
             logging.exception("Making image failed, posting text instead")
             twitter_api.tweet_text(comment)
