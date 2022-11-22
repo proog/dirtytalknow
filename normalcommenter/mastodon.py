@@ -29,6 +29,7 @@ class Mastodon:
             file_name=filename,
             description=alt_text,
             mime_type="image/jpeg",
+            focus=(-1, 1),  # Focus thumbnails on the top-left corner
         )
         media_id = media.id
 
