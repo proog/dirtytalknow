@@ -1,4 +1,5 @@
 import logging
+import textwrap
 
 import mastodon
 
@@ -15,8 +16,14 @@ class Mastodon:
         )
 
     def post_text(self, text: str):
-        logging.info("Posting text: %s", text)
-        self.api.status_post(text)
+        text = " ".join(text.splitlines())
+        posts = textwrap.wrap(text, width=500)
+        reply_to_id = None
+
+        for post in posts:
+            logging.info("Posting text: %s", post)
+
+            reply_to_id = self.api.status_post(post, in_reply_to_id=reply_to_id).id
 
     def post_image(self, file, filename="image.jpg", alt_text=None):
         logging.info("Uploading media with filename %s", filename)
