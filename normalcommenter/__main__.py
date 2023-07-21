@@ -6,7 +6,10 @@ from datetime import datetime, timedelta
 
 from . import dirty, imaging, mastodon, twitter
 
-logging.basicConfig(level=logging.INFO, format="%(asctime)s %(message)s")
+logging.basicConfig(
+    level=logging.INFO, format="%(asctime)s %(name)s:%(levelname)s %(message)s"
+)
+logger = logging.getLogger(__name__)
 
 min_wait_secs = 5 * 60 * 60  # 5 hours
 max_wait_secs = 16 * 60 * 60  # 16 hours
@@ -37,7 +40,7 @@ while True:
     wait_seconds = random.randint(min_wait_secs, max_wait_secs)
     next_execution = datetime.now() + timedelta(seconds=wait_seconds)
 
-    logging.info("Waiting %is (until %s)", wait_seconds, next_execution.strftime("%c"))
+    logger.info("Waiting %is (until %s)", wait_seconds, next_execution.strftime("%c"))
     time.sleep(wait_seconds)
 
     try:
@@ -51,31 +54,31 @@ while True:
                 try:
                     twitter_api.tweet_image(image, alt_text=comment)
                 except:
-                    logging.exception("Posting image to Twitter failed")
+                    logger.exception("Posting image to Twitter failed")
 
             if mastodon_api:
                 try:
                     mastodon_api.post_image(image, alt_text=comment)
                 except:
-                    logging.exception("Posting image to Mastodon failed")
+                    logger.exception("Posting image to Mastodon failed")
 
         except imaging.TextFittingException:
-            logging.exception("Making image failed, posting text instead")
+            logger.exception("Making image failed, posting text instead")
 
             if twitter_api:
                 try:
                     twitter_api.tweet_text(comment)
                 except:
-                    logging.exception("Posting text to Twitter failed")
+                    logger.exception("Posting text to Twitter failed")
 
             if mastodon_api:
                 try:
                     mastodon_api.post_text(comment)
                 except:
-                    logging.exception("Posting text to Mastodon failed")
+                    logger.exception("Posting text to Mastodon failed")
 
     except KeyboardInterrupt:
         exit(1)
 
     except:
-        logging.exception("Execution error")
+        logger.exception("Execution error")

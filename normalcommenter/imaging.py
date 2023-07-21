@@ -1,12 +1,14 @@
 import io
-import logging
 import os
 import os.path
 import textwrap
+from logging import getLogger
 
 from PIL import Image, ImageDraw, ImageFont
 
 from . import ASSETS_PATH
+
+logger = getLogger(__name__)
 
 FONT_FILE = os.path.join(ASSETS_PATH, "fonts/joystix.ttf")
 IMAGE_DIR = os.path.join(ASSETS_PATH, "images")
@@ -69,7 +71,7 @@ def fit_text_to_image(font_name: str, text: str, img_width: int, img_height: int
             )
 
             if text_width <= max_width and text_height <= max_height:
-                logging.info("Fit text to image in %i attempts", attempts)
+                logger.info("Fit text to image in %i attempts", attempts)
                 return (font, wrapped_text)
 
     raise TextFittingException("Couldn't fit text to image: %s" % text)

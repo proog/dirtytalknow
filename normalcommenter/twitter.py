@@ -1,7 +1,9 @@
-import logging
 import textwrap
+from logging import getLogger
 
 import tweepy
+
+logger = getLogger(__name__)
 
 
 class Twitter:
@@ -18,13 +20,13 @@ class Twitter:
         reply_to_id = None
 
         for tweet in tweets:
-            logging.info("Tweeting text: %s", tweet)
+            logger.info("Tweeting text: %s", tweet)
 
             reply_kwargs = {"in_reply_to_status_id": reply_to_id}
             reply_to_id = self.api.update_status(tweet, **reply_kwargs).id
 
     def tweet_image(self, file, filename="image.jpg", alt_text=""):
-        logging.info("Uploading media with filename %s", filename)
+        logger.info("Uploading media with filename %s", filename)
 
         # Seek to beginning before uploading https://github.com/tweepy/tweepy/issues/1667#issuecomment-927342823
         file.seek(0)
@@ -33,8 +35,8 @@ class Twitter:
         media_id = media.media_id
 
         if alt_text:
-            logging.info('Adding alt text "%s" to media id: %i', alt_text, media_id)
+            logger.info('Adding alt text "%s" to media id: %i', alt_text, media_id)
             self.api.create_media_metadata(media_id, alt_text)
 
-        logging.info("Tweeting media id: %i", media_id)
+        logger.info("Tweeting media id: %i", media_id)
         self.api.update_status("", media_ids=[media_id])

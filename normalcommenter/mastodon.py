@@ -1,7 +1,9 @@
-import logging
 import textwrap
+from logging import getLogger
 
 import mastodon
+
+logger = getLogger(__name__)
 
 
 class Mastodon:
@@ -21,12 +23,12 @@ class Mastodon:
         reply_to_id = None
 
         for post in posts:
-            logging.info("Posting text: %s", post)
+            logger.info("Posting text: %s", post)
 
             reply_to_id = self.api.status_post(post, in_reply_to_id=reply_to_id).id
 
     def post_image(self, file, filename="image.jpg", alt_text=None):
-        logging.info("Uploading media with filename %s", filename)
+        logger.info("Uploading media with filename %s", filename)
 
         # Seek to beginning before uploading
         file.seek(0)
@@ -40,5 +42,5 @@ class Mastodon:
         )
         media_id = media.id
 
-        logging.info("Posting media id: %i", media_id)
+        logger.info("Posting media id: %i", media_id)
         self.api.status_post("", media_ids=[media_id])
