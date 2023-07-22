@@ -28,7 +28,7 @@ class Mastodon:
             reply_to_id = self.api.status_post(post, in_reply_to_id=reply_to_id).id
 
     def post_image(self, file, filename="image.jpg", alt_text=None):
-        logger.info("Uploading media with filename %s", filename)
+        logger.info("Uploading media with filename %s, alt text %s", filename, alt_text)
 
         # Seek to beginning before uploading
         file.seek(0)
