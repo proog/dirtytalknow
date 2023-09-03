@@ -8,6 +8,7 @@ tweepy = "*"
 requests = "*"
 pillow = "*"
 "mastodon.py" = "*"
+atproto = "*"
 
 [requires]
 python_version = "3"

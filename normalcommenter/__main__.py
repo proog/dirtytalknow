@@ -4,7 +4,7 @@ import random
 import time
 from datetime import datetime, timedelta
 
-from . import dirty, imaging, mastodon, twitter
+from . import bluesky, dirty, imaging, mastodon, twitter
 
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s %(name)s:%(levelname)s %(message)s"
@@ -32,6 +32,15 @@ mastodon_api = (
         os.environ["MASTODON_ACCESS_TOKEN"],
     )
     if os.getenv("MASTODON_BASE_URL")
+    else None
+)
+bluesky_api = (
+    bluesky.Bluesky(
+        os.environ["BLUESKY_BASE_URL"],
+        os.environ["BLUESKY_LOGIN"],
+        os.environ["BLUESKY_PASSWORD"],
+    )
+    if os.getenv("BLUESKY_BASE_URL")
     else None
 )
 
@@ -62,6 +71,12 @@ while True:
                 except:
                     logger.exception("Posting image to Mastodon failed")
 
+            if bluesky_api:
+                try:
+                    bluesky_api.post_image(image, alt_text=comment)
+                except:
+                    logger.exception("Posting image to Bluesky failed")
+
         except imaging.TextFittingException:
             logger.exception("Making image failed, posting text instead")
 
@@ -76,6 +91,12 @@ while True:
                     mastodon_api.post_text(comment)
                 except:
                     logger.exception("Posting text to Mastodon failed")
+
+            if bluesky_api:
+                try:
+                    bluesky_api.post_text(comment)
+                except:
+                    logger.exception("Posting text to Bluesky failed")
 
     except KeyboardInterrupt:
         exit(1)
