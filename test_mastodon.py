@@ -3,8 +3,11 @@ import os
 from io import BytesIO
 
 import pytest
+from dotenv import load_dotenv
 
 from normalcommenter.mastodon import Mastodon
+
+load_dotenv()
 
 
 @pytest.mark.skip()
@@ -19,7 +22,13 @@ def test_mastodon_post_text():
     # 520 character text (two posts)
     text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque condimentum felis porttitor imperdiet ultricies. Duis eget ipsum nunc. Aenean vehicula faucibus risus, ac dapibus dui maximus a. Sed quis magna ex. Nam pharetra est facilisis tortor malesuada placerat nec at ex. Duis blandit lobortis maximus. Cras pretium sollicitudin sem eu tincidunt. Vestibulum ac nunc pharetra, tincidunt dolor in, tincidunt lectus. Proin viverra quis mauris at congue. Nunc mollis nunc sed felis porta, ut aliquam tortor dapibus nam."
 
-    mastodon_api.post_text(text)
+    post_ids = mastodon_api.post_text(text)
+
+    assert len(post_ids) == 2
+
+    # Clean up
+    for post_id in reversed(post_ids):
+        mastodon_api.delete_post(post_id)
 
 
 @pytest.mark.skip()
@@ -37,4 +46,7 @@ def test_mastodon_post_image():
     )
     image_stream = BytesIO(image_bytes)
 
-    mastodon_api.post_image(image_stream, alt_text="A dark square")
+    post_id = mastodon_api.post_image(image_stream, alt_text="A dark square")
+
+    # Clean up
+    mastodon_api.delete_post(post_id)
