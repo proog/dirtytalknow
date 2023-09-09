@@ -6,9 +6,7 @@ from datetime import datetime, timedelta
 
 from . import bluesky, dirty, imaging, mastodon, twitter
 
-logging.basicConfig(
-    level=logging.INFO, format="%(asctime)s %(name)s:%(levelname)s %(message)s"
-)
+logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 min_wait_secs = 5 * 60 * 60  # 5 hours
@@ -44,6 +42,14 @@ bluesky_api = (
     else None
 )
 
+logger.info(
+    "Enabled platforms: %s",
+    [
+        type(platform).__name__
+        for platform in [twitter_api, mastodon_api, bluesky_api]
+        if platform is not None
+    ],
+)
 
 while True:
     wait_seconds = random.randint(min_wait_secs, max_wait_secs)
