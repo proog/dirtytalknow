@@ -22,7 +22,7 @@ def test_twitter_tweet_text():
     # 300 character text (two posts)
     text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque condimentum felis porttitor imperdiet ultricies. Duis eget ipsum nunc. Aenean vehicula faucibus risus, ac dapibus dui maximus a. Sed quis magna ex. Nam pharetra est facilisis tortor malesuada placerat nec at ex. Duis blandit lobortist."
 
-    tweet_ids = twitter_api.tweet_text(text)
+    tweet_ids = twitter_api.post_text(text)
 
     assert len(tweet_ids) == 2
 
@@ -46,7 +46,7 @@ def test_twitter_tweet_image():
     )
     image_stream = BytesIO(image_bytes)
 
-    tweet_id = twitter_api.tweet_image(image_stream, alt_text="A dark square")
+    tweet_id = twitter_api.post_image(image_stream, alt_text="A dark square")
 
     # Clean up
     twitter_api.delete_tweet(tweet_id)

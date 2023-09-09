@@ -22,7 +22,7 @@ class Twitter:
             access_token_secret=access_token_secret,
         )
 
-    def tweet_text(self, text: str) -> list[str]:
+    def post_text(self, text: str) -> list[str]:
         text = " ".join(text.splitlines())
         tweets = textwrap.wrap(text, width=280)
         tweet_ids = []
@@ -38,7 +38,7 @@ class Twitter:
 
         return tweet_ids
 
-    def tweet_image(self, file, filename="image.jpg", alt_text="") -> str:
+    def post_image(self, file, filename="image.jpg", alt_text="") -> str:
         logger.info("Uploading media with filename %s", filename)
 
         # Seek to beginning before uploading https://github.com/tweepy/tweepy/issues/1667#issuecomment-927342823
@@ -59,3 +59,6 @@ class Twitter:
     def delete_tweet(self, tweet_id: str):
         logger.info("Deleting tweet id: %s", tweet_id)
         self.api_v2.delete_tweet(tweet_id)
+
+    def __str__(self) -> str:
+        return "Twitter"

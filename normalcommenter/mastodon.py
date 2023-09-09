@@ -54,3 +54,6 @@ class Mastodon:
     def delete_post(self, post_id: int):
         logger.info("Deleting post id: %i", post_id)
         self.api.status_delete(post_id)
+
+    def __str__(self) -> str:
+        return "Mastodon"

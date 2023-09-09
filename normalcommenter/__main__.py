@@ -4,7 +4,10 @@ import random
 import time
 from datetime import datetime, timedelta
 
-from . import bluesky, dirty, imaging, mastodon, twitter
+from . import dirty, imaging
+from .bluesky import Bluesky
+from .mastodon import Mastodon
+from .twitter import Twitter
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -13,7 +16,7 @@ min_wait_secs = 5 * 60 * 60  # 5 hours
 max_wait_secs = 16 * 60 * 60  # 16 hours
 
 twitter_api = (
-    twitter.Twitter(
+    Twitter(
         os.environ["TWITTER_CONSUMER_KEY"],
         os.environ["TWITTER_CONSUMER_SECRET"],
         os.environ["TWITTER_ACCESS_TOKEN"],
@@ -23,7 +26,7 @@ twitter_api = (
     else None
 )
 mastodon_api = (
-    mastodon.Mastodon(
+    Mastodon(
         os.environ["MASTODON_BASE_URL"],
         os.environ["MASTODON_CLIENT_ID"],
         os.environ["MASTODON_CLIENT_SECRET"],
@@ -33,7 +36,7 @@ mastodon_api = (
     else None
 )
 bluesky_api = (
-    bluesky.Bluesky(
+    Bluesky(
         os.environ["BLUESKY_BASE_URL"],
         os.environ["BLUESKY_LOGIN"],
         os.environ["BLUESKY_PASSWORD"],
@@ -42,14 +45,13 @@ bluesky_api = (
     else None
 )
 
-logger.info(
-    "Enabled platforms: %s",
-    [
-        type(platform).__name__
-        for platform in [twitter_api, mastodon_api, bluesky_api]
-        if platform is not None
-    ],
-)
+platforms: list[Twitter | Mastodon | Bluesky] = [
+    platform
+    for platform in [twitter_api, mastodon_api, bluesky_api]
+    if platform is not None
+]
+
+logger.info("Enabled platforms: %s", ", ".join(str(platform) for platform in platforms))
 
 while True:
     wait_seconds = random.randint(min_wait_secs, max_wait_secs)
@@ -65,44 +67,20 @@ while True:
         try:
             image = imaging.make_image_with_text(bg_image, comment, position=position)
 
-            if twitter_api:
+            for platform in platforms:
                 try:
-                    twitter_api.tweet_image(image, alt_text=comment)
+                    platform.post_image(image, alt_text=comment)
                 except:
-                    logger.exception("Posting image to Twitter failed")
-
-            if mastodon_api:
-                try:
-                    mastodon_api.post_image(image, alt_text=comment)
-                except:
-                    logger.exception("Posting image to Mastodon failed")
-
-            if bluesky_api:
-                try:
-                    bluesky_api.post_image(image, alt_text=comment)
-                except:
-                    logger.exception("Posting image to Bluesky failed")
+                    logger.exception("Posting image to %s failed", platform)
 
         except imaging.TextFittingException:
             logger.exception("Making image failed, posting text instead")
 
-            if twitter_api:
+            for platform in platforms:
                 try:
-                    twitter_api.tweet_text(comment)
+                    platform.post_text(comment)
                 except:
-                    logger.exception("Posting text to Twitter failed")
-
-            if mastodon_api:
-                try:
-                    mastodon_api.post_text(comment)
-                except:
-                    logger.exception("Posting text to Mastodon failed")
-
-            if bluesky_api:
-                try:
-                    bluesky_api.post_text(comment)
-                except:
-                    logger.exception("Posting text to Bluesky failed")
+                    logger.exception("Posting text to %s failed", platform)
 
     except KeyboardInterrupt:
         exit(1)

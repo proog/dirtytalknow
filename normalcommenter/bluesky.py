@@ -44,3 +44,6 @@ class Bluesky:
 
         post_rkey = AtUri.from_str(post_uri).rkey
         self.api.delete_post(post_rkey)
+
+    def __str__(self) -> str:
+        return "Bluesky"
